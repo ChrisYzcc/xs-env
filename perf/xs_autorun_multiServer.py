@@ -111,7 +111,7 @@ def get_server(server_list):
     l.append(Server(s))
   return l
 
-def xs_run(server_list, workloads, xs_path, warmup, max_instr, threads, version=2006, dry_run=False, verbose=True):
+def xs_run(server_list, workloads, xs_path, warmup, max_instr, threads, version=2006, dry_run=False, verbose=True, cache_monitor=False):
   emu_path = os.path.join(xs_path, "build/emu")
   nemu_so_path = os.path.join(xs_path, "ready-to-run/riscv64-nemu-interpreter-so")
   # nemu_so_path = os.path.join(xs_path, "ready-to-run/riscv64-spike-so")
@@ -138,6 +138,9 @@ def xs_run(server_list, workloads, xs_path, warmup, max_instr, threads, version=
       workload = workloads[index]
       random_seed = random.randint(0, 9999)
       run_cmd = base_arguments + [workload.get_bin_path()] + ["-s", f"{random_seed}"]
+
+      if cache_monitor:
+        run_cmd += ["--cache-monitor"]
 
       if not os.path.exists(workload.get_res_dir()):
         os.makedirs(workload.get_res_dir(), exist_ok=True)
@@ -367,6 +370,7 @@ if __name__ == "__main__":
   parser.add_argument('--resume', action='store_true', default=False, help="continue to exe, ignore the aborted and success tests")
   parser.add_argument('--dry-run', action='store_true', default=False, help="does not run real simulation")
   parser.add_argument('--verbose', '-v', action='store_true', default=True, help="display more outputs")
+  parser.add_argument('--cache-monitor', action='store_true', default=False, help="monitor cache")
 
   args = parser.parse_args()
 
@@ -449,4 +453,4 @@ if __name__ == "__main__":
     print("All:  ", len(gcpt))
     print("First:", gcpt[0])
     print("Last: ", gcpt[-1])
-    xs_run(args.server_list, gcpt, args.xs, args.warmup, args.max_instr, args.threads, args.version, args.dry_run, args.verbose)
+    xs_run(args.server_list, gcpt, args.xs, args.warmup, args.max_instr, args.threads, args.version, args.dry_run, args.verbose, args.cache_monitor)
