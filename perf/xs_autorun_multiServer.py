@@ -22,7 +22,7 @@ from tqdm import tqdm
 """ PRAMETERS THAT NEED YOU CHECK """
 tasks_dir = "SPEC06_EmuTasks_10_22_2021"
 perf_base_path = ""
-gcc12Enable = True
+gcc12Enable = False
 emuArgR = "/nfs/home/share/liyanqin/old-gcpt-restorer/gcpt.bin"
 
 ref_run_time_path = "/nfs/home/share/liyanqin/env-scripts/perf/json/gcc12o3-incFpcOff-jeMalloc-time.json"
